@@ -1,0 +1,34 @@
+<span id="L1" class="LineNr"> 1 </span><span class="PreProc">#include </span><span class="String">&lt;GLUT/glut.h&gt;</span> <span class="Comment">// ライブラリ用ヘッダファイルの読み込み</span><br></br>
+<span id="L2" class="LineNr"> 2 </span><span class="PreProc">#include </span><span class="String">&lt;math.h&gt;</span><br></br>
+<span id="L3" class="LineNr"> 3 </span><br></br>
+<span id="L4" class="LineNr"> 4 </span><span class="Comment">// 表示部分をこの関数で記入</span><br></br>
+<span id="L5" class="LineNr"> 5 </span><span class="Type">void</span> display(<span class="Type">void</span>) {<br></br>
+<span id="L6" class="LineNr"> 6 </span>  glClearColor (<span class="Float">1.0</span>, <span class="Float">1.0</span>, <span class="Float">1.0</span>, <span class="Float">1.0</span>);  <span class="Comment">// 消去色指定</span><br></br>
+<span id="L7" class="LineNr"> 7 </span>  glClear (GL_COLOR_BUFFER_BIT );     <span class="Comment">// 画面消去</span><br></br>
+<span id="L8" class="LineNr"> 8 </span><br></br>
+<span id="L9" class="LineNr"> 9 </span>  glColor3d(<span class="Float">0.0</span>, <span class="Float">0.0</span>, <span class="Float">1.0</span>);   <span class="Comment">// 色指定(R,G,B)で0～1まで</span><br></br>
+<span id="L10" class="LineNr">10 </span>  glBegin(GL_TRIANGLES);<br></br>
+<span id="L11" class="LineNr">11 </span><br></br>
+<span id="L12" class="LineNr">12 </span>  <span class="Repeat">for</span>(<span class="Type">double</span> i = -<span class="Float">0.2</span>; i &lt; <span class="Float">0.3</span>; i+=<span class="Float">0.1</span>) {<br></br>
+<span id="L13" class="LineNr">13 </span>    <span class="Repeat">for</span>(<span class="Type">double</span> j = -<span class="Float">0.2</span>; j &lt; <span class="Float">0.3</span>; j+=<span class="Float">0.1</span>) {<br></br>
+<span id="L14" class="LineNr">14 </span>      glVertex2d(i, j);<br></br>
+<span id="L15" class="LineNr">15 </span>      glVertex2d(i+<span class="Float">0.1</span>, j);<br></br>
+<span id="L16" class="LineNr">16 </span>      glVertex2d(i, j+<span class="Float">0.1</span>);<br></br>
+<span id="L17" class="LineNr">17 </span>    }<br></br>
+<span id="L18" class="LineNr">18 </span>  }<br></br>
+<span id="L19" class="LineNr">19 </span><br></br>
+<span id="L20" class="LineNr">20 </span>  glEnd();<br></br>
+<span id="L21" class="LineNr">21 </span><br></br>
+<span id="L22" class="LineNr">22 </span>  glFlush(); <span class="Comment">// 画面出力</span><br></br>
+<span id="L23" class="LineNr">23 </span>}<br></br>
+<span id="L24" class="LineNr">24 </span><br></br>
+<span id="L25" class="LineNr">25 </span><span class="Comment">// メインプログラム</span><br></br>
+<span id="L26" class="LineNr">26 </span><span class="Type">int</span> main (<span class="Type">int</span> argc, <span class="Type">char</span> *argv[]) {<br></br>
+<span id="L27" class="LineNr">27 </span>  glutInit(&amp;argc, argv);          <span class="Comment">// ライブラリの初期化</span><br></br>
+<span id="L28" class="LineNr">28 </span>  glutInitWindowSize(<span class="Number">400</span> , <span class="Number">400</span>);  <span class="Comment">// ウィンドウサイズを指定</span><br></br>
+<span id="L29" class="LineNr">29 </span>  glutCreateWindow(argv[<span class="Number">0</span>]);      <span class="Comment">// ウィンドウを作成</span><br></br>
+<span id="L30" class="LineNr">30 </span>  glutDisplayFunc(display);       <span class="Comment">// 表示関数を指定</span><br></br>
+<span id="L31" class="LineNr">31 </span>  glutMainLoop();                 <span class="Comment">// イベント待ち</span><br></br>
+<span id="L32" class="LineNr">32 </span>  <span class="Statement">return</span> <span class="Number">0</span>;<br></br>
+<span id="L33" class="LineNr">33 </span>}<br></br>
+<span id="L34" class="LineNr">34 </span><br></br>

@@ -1,0 +1,64 @@
+<span id="L1" class="LineNr"> 1 </span><span class="PreProc">#include </span><span class="String">&lt;GLUT/glut.h&gt;</span> <span class="Comment">// ライブラリ用ヘッダファイルの読み込み</span><br></br>
+<span id="L2" class="LineNr"> 2 </span><span class="PreProc">#include </span><span class="String">&lt;math.h&gt;</span><br></br>
+<span id="L3" class="LineNr"> 3 </span><span class="PreProc">#include </span><span class="String">&lt;vector&gt;</span><br></br>
+<span id="L4" class="LineNr"> 4 </span><span class="PreProc">#include </span><span class="String">&lt;complex&gt;</span><br></br>
+<span id="L5" class="LineNr"> 5 </span><span class="PreProc">#include </span><span class="String">&lt;iostream&gt;</span><br></br>
+<span id="L6" class="LineNr"> 6 </span><span class="Comment">/*</span><span class="Comment"> Mandelbrot setをOpenGLで鑑賞する</span><br></br>
+<span id="L7" class="LineNr"> 7 </span><span class="Comment"> * 左クリック:クリック位置を中央にして2倍拡大</span><br></br>
+<span id="L8" class="LineNr"> 8 </span><span class="Comment"> * 右クリック:同様に4倍縮小</span><br></br>
+<span id="L9" class="LineNr"> 9 </span><span class="Comment"> </span><span class="Comment">*/</span><br></br>
+<span id="L10" class="LineNr">10 </span><span class="StorageClass">const</span> <span class="Type">int</span> W = <span class="Number">400</span>; <span class="Comment">//画面サイズ</span><br></br>
+<span id="L11" class="LineNr">11 </span><span class="StorageClass">const</span> <span class="Type">int</span> H = <span class="Number">400</span>;<br></br>
+<span id="L12" class="LineNr">12 </span>std::<span class="Type">complex</span>&lt;<span class="Type">double</span>&gt; zoom(<span class="Float">0.7</span>, <span class="Float">0.0</span>);      <span class="Comment">//拡大率</span><br></br>
+<span id="L13" class="LineNr">13 </span>std::<span class="Type">complex</span>&lt;<span class="Type">double</span>&gt; center(-<span class="Float">0.6</span>, <span class="Float">0.0</span>);   <span class="Comment">//中心座標</span><br></br>
+<span id="L14" class="LineNr">14 </span><br></br>
+<span id="L15" class="LineNr">15 </span><span class="Type">void</span> display(<span class="Type">void</span>){                   <span class="Comment">//表示関数</span><br></br>
+<span id="L16" class="LineNr">16 </span>  glClearColor (<span class="Float">1.0</span>, <span class="Float">1.0</span>, <span class="Float">1.0</span>, <span class="Float">1.0</span>);  <span class="Comment">// 消去色指定</span><br></br>
+<span id="L17" class="LineNr">17 </span>  glClear (GL_COLOR_BUFFER_BIT );     <span class="Comment">// 画面消去</span><br></br>
+<span id="L18" class="LineNr">18 </span>  glBegin(GL_POINTS);<br></br>
+<span id="L19" class="LineNr">19 </span>  <span class="Repeat">for</span>(<span class="Type">double</span> i = -<span class="Float">1.0</span> ; i &lt; <span class="Number">1</span>; i += <span class="Float">2.0</span>/W){<br></br>
+<span id="L20" class="LineNr">20 </span>    <span class="Repeat">for</span>(<span class="Type">double</span> j = -<span class="Float">1.0</span> ; j &lt; <span class="Float">1.0</span>; j += <span class="Float">2.0</span>/H){<br></br>
+<span id="L21" class="LineNr">21 </span>      std::<span class="Type">complex</span>&lt;<span class="Type">double</span>&gt; c(i, j);<br></br>
+<span id="L22" class="LineNr">22 </span>      c = c/zoom + center; <span class="Comment">//正規化座標系から投射</span><br></br>
+<span id="L23" class="LineNr">23 </span>      std::<span class="Type">complex</span>&lt;<span class="Type">double</span>&gt; z(<span class="Number">0</span>, <span class="Number">0</span>);<br></br>
+<span id="L24" class="LineNr">24 </span>      <span class="Type">int</span> k = <span class="Number">0</span>; <span class="Comment">//abs(z)&gt;2を超えたら必ず発散する</span><br></br>
+<span id="L25" class="LineNr">25 </span>      <span class="Repeat">for</span>(k = <span class="Number">0</span>; k &lt; <span class="Number">100</span> &amp; abs(z) &lt; <span class="Number">2</span>; k++){<br></br>
+<span id="L26" class="LineNr">26 </span>        z = z*z + c; <span class="Comment">//漸化式</span><br></br>
+<span id="L27" class="LineNr">27 </span>      }<br></br>
+<span id="L28" class="LineNr">28 </span>      <span class="Conditional">if</span>(abs(z) &gt; <span class="Number">2</span>){<br></br>
+<span id="L29" class="LineNr">29 </span>        <span class="Comment">//r:絶対値, g:偏角, b:発散の速さ</span><br></br>
+<span id="L30" class="LineNr">30 </span>        glColor3d(abs(z) - <span class="Number">2</span>, arg(z)/(<span class="Number">2</span>*<span class="Constant">M_PI</span>) + <span class="Float">0.5</span>, k / <span class="Float">10.0</span>);<br></br>
+<span id="L31" class="LineNr">31 </span>      }<span class="Conditional">else</span>{<br></br>
+<span id="L32" class="LineNr">32 </span>        glColor3d(<span class="Float">0.0</span>, <span class="Float">0.0</span>, <span class="Float">0.0</span>);<br></br>
+<span id="L33" class="LineNr">33 </span>      }<br></br>
+<span id="L34" class="LineNr">34 </span>      glVertex2d(i, j);<br></br>
+<span id="L35" class="LineNr">35 </span>    }<br></br>
+<span id="L36" class="LineNr">36 </span>  }<br></br>
+<span id="L37" class="LineNr">37 </span>  glEnd();<br></br>
+<span id="L38" class="LineNr">38 </span>  glFlush(); <span class="Comment">// 画面出力</span><br></br>
+<span id="L39" class="LineNr">39 </span>}<br></br>
+<span id="L40" class="LineNr">40 </span><br></br>
+<span id="L41" class="LineNr">41 </span><span class="Type">void</span> mouse(<span class="Type">int</span> button, <span class="Type">int</span> state, <span class="Type">int</span> x, <span class="Type">int</span> y){   <span class="Comment">//クリックしたら呼ばれる</span><br></br>
+<span id="L42" class="LineNr">42 </span>  <span class="Conditional">if</span>(state == <span class="Number">0</span>){   <span class="Comment">//ピクセル座標系から正規化座標系へ投射</span><br></br>
+<span id="L43" class="LineNr">43 </span>    std::<span class="Type">complex</span>&lt;<span class="Type">double</span>&gt; c(<span class="Number">2</span>*<span class="Type">double</span>(x)/<span class="Type">double</span>(W)-<span class="Number">1</span>, <span class="Number">1</span>-<span class="Number">2</span>*<span class="Type">double</span>(y)/<span class="Type">double</span>(H));<br></br>
+<span id="L44" class="LineNr">44 </span>    center = c/zoom + center; <span class="Comment">//</span><br></br>
+<span id="L45" class="LineNr">45 </span>    <span class="Conditional">if</span>(button == <span class="Number">0</span>){<br></br>
+<span id="L46" class="LineNr">46 </span>      zoom *= <span class="Float">2.0</span>;<br></br>
+<span id="L47" class="LineNr">47 </span>    }<span class="Conditional">else</span> <span class="Conditional">if</span>(button == <span class="Number">2</span>){<br></br>
+<span id="L48" class="LineNr">48 </span>      zoom /= <span class="Float">4.0</span>;<br></br>
+<span id="L49" class="LineNr">49 </span>    }<br></br>
+<span id="L50" class="LineNr">50 </span>    display();<br></br>
+<span id="L51" class="LineNr">51 </span>  }<br></br>
+<span id="L52" class="LineNr">52 </span>}<br></br>
+<span id="L53" class="LineNr">53 </span><br></br>
+<span id="L54" class="LineNr">54 </span><span class="Comment">// メインプログラム</span><br></br>
+<span id="L55" class="LineNr">55 </span><span class="Type">int</span> main (<span class="Type">int</span> argc, <span class="Type">char</span> *argv[]) {<br></br>
+<span id="L56" class="LineNr">56 </span>  glutInit(&amp;argc, argv);          <span class="Comment">// ライブラリの初期化</span><br></br>
+<span id="L57" class="LineNr">57 </span>  glutInitWindowSize(W , H);      <span class="Comment">// ウィンドウサイズを指定</span><br></br>
+<span id="L58" class="LineNr">58 </span>  glutCreateWindow(argv[<span class="Number">0</span>]);      <span class="Comment">// ウィンドウを作成</span><br></br>
+<span id="L59" class="LineNr">59 </span>  glutDisplayFunc(display);       <span class="Comment">// 表示関数を指定</span><br></br>
+<span id="L60" class="LineNr">60 </span>  glutMouseFunc(mouse);           <span class="Comment">// マウス関数を指定</span><br></br>
+<span id="L61" class="LineNr">61 </span>  glViewport(<span class="Number">0</span>, <span class="Number">0</span>, W, H);<br></br>
+<span id="L62" class="LineNr">62 </span>  glutMainLoop();                 <span class="Comment">// イベント待ち</span><br></br>
+<span id="L63" class="LineNr">63 </span>  <span class="Statement">return</span> <span class="Number">0</span>;<br></br>
+<span id="L64" class="LineNr">64 </span>}<br></br>
